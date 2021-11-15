@@ -56,3 +56,77 @@ ggplot(data = homes_sub, aes(x = Price)) +
 #3e6 is 3 million, the e is an exponent 
 ```
 
+Explore the relationship (visual data exploration) between square footage and home price. Change the point COLOR by City, and the point shape by sale status. 
+
+```{r}
+ggplot(data = homes_sub, aes(x = SqFt, y = Price)) + 
+  geom_point(aes(color = City, shape = Status)) + 
+  geom_smooth(method = "lm")
+```
+
+## Model the relationship with home price as DV
+
+```{r}
+homes_lm1 <- lm(Price ~ City + Bedrooms + Bathrooms + SqFt + PricePerSqFt + Status, data = homes_sub)
+
+#Make a subset that only contains the quantitative variables 
+
+homes_quant <- homes_sub %>% 
+  select(Price:PricePerSqFt) 
+
+homes_cor <- cor (homes_quant)
+homes_cor
+
+corrplot(homes_cor)
+plot(homes_lm1)
+```
+
+Try another model (homes_lm2) where we simplify this a bit: 
+
+- City 
+- SqFt 
+- Status 
+
+```{r}
+homes_lm2 <- lm(Price ~ City + SqFt + Status, data = homes_sub)
+
+homes_lm2
+
+plot(homes_lm2)
+```
+
+
+Find the AIC value of each model:
+
+```{r}
+AIC(homes_lm1)
+AIC(homes_lm2)
+```
+Lower AIC show a better fit. 
+
+
+Try another permutation of this model that you think might make sense, check out and compare the model fit, outputs and AIC value. 
+
+```{r}
+homes_lm3 <- lm(Price ~ Bedrooms + Bathrooms + SqFt + Status + City, data = homes_sub)
+
+summary(homes_lm3)
+homes_lm3
+```
+
+```{r}
+AIC(homes_lm1)
+AIC(homes_lm2)
+AIC(homes_lm3)
+```
+
+Use 'modelsummary' to show model outputs side-by-side: 
+
+If you use modelsummary to retun model outputs of multiple models, it wants you to feed it to it as a list. 
+
+```{r}
+modelsummary(list(homes_lm1, homes_lm2, homes_lm3))
+```
+
+## Start making predictions with these model 
+
