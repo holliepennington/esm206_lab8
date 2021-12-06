@@ -69,6 +69,7 @@ ggplot(data = homes_sub, aes(x = SqFt, y = Price)) +
 
 ```{r}
 homes_lm1 <- lm(Price ~ City + Bedrooms + Bathrooms + SqFt + PricePerSqFt + Status, data = homes_sub)
+homes_lm1
 
 #Make a subset that only contains the quantitative variables 
 
@@ -123,7 +124,7 @@ AIC(homes_lm3)
 
 Use 'modelsummary' to show model outputs side-by-side: 
 
-If you use modelsummary to retun model outputs of multiple models, it wants you to feed it to it as a list. 
+If you use modelsummary to return model outputs of multiple models, it wants you to feed it to it as a list. 
 
 ```{r}
 modelsummary(list(homes_lm1, homes_lm2, homes_lm3))
@@ -137,3 +138,4 @@ Use `broom::augment()`
 homes_predicted <- augment(homes_lm1)
 ```
 
+Use the `predict()` function 
